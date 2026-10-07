@@ -2,16 +2,20 @@ import time, random, keyboard
 import tetrisplay, importlib
 
 def Start():
-    grid = tetrisplay.build_clean_grid()
+    print("Please input Row and column values to use:\n")
+    playerRows = int(input("Rows: "))
+    playerColumns = int(input("Columns: "))
+    
+    grid = tetrisplay.build_clean_grid(playerRows, playerColumns)
     return grid
 
 def GameLoop(grid):
     importlib.reload(tetrisplay)
 
     while True:
-        col = random.randint(0, tetrisplay._COLUMNS - 1)
+        col = random.randint(0, len(grid) - 1)
         
-        if grid[col][0] == tetrisplay._BLOCK:
+        if grid[col][0] != tetrisplay._BLANK:
             print("Game over!")
             return grid
 
