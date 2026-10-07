@@ -1,5 +1,3 @@
-_ROWS = 10
-_COLUMNS = 5
 _INTERVAL = 0.3
 _BLANK = "  "
 _BLOCK = "\u2588\u2588"
@@ -40,7 +38,7 @@ def move_block(grid, col, row, step):
 
     # Safety check to stop block from moving past col 0 and 4
     if 0 <= new_col < len(grid) and grid[new_col][row] == _BLANK:
-        grid[new_col][row] = grid[col][row]
+        grid[new_col][row] = grid[col][row] # Copies existing block data
         grid[col][row] = _BLANK
         redraw(grid)
         return new_col
@@ -60,6 +58,23 @@ def display_grid(grid):
             print(grid[c][r], "|", sep="", end="")
         print()
 
+def full_row(grid):
+    """Checks if bottom row is full. If yes, remove blocks, shift down top."""
+    
+    bottom = len(grid[0]) - 1 # Bottom row index
+    count = 0
+    
+    for c in range(len(grid)):
+        if grid[c][bottom] != _BLANK:
+            count += 1
+
+    if count == len(grid):
+        for c in range(len(grid)):
+            del grid[c][bottom] # Remove the bottom cell from this 'c' column
+            grid[c].insert(0, _BLANK)
+
+    return grid
+    
 
 def show_dropping_block(grid, column_number):
     """Given a grid and a column to drop into, simulate a visual drop of a box."""
@@ -67,7 +82,7 @@ def show_dropping_block(grid, column_number):
     # Tracks falling INSIDE the function so moving and falling apply to the same block at the same time
     col = column_number
     row = 0
-    block = random.choice(_COLORS) + _BLOCK + _RESET
+    block = random.choice(_COLORS) + _BLOCK + _RESET # Resets existing colors, randomized for new color, applies it to the block
     grid[col][row] = block
     redraw(grid)
 
@@ -83,6 +98,8 @@ def show_dropping_block(grid, column_number):
 
         # Checks if landed on bottom row, ELSE IF landed on block
         if row == len(grid[0]) - 1:
+            full_row(grid)
+            redraw(grid)
             return grid
         elif grid[col][row + 1] != _BLANK:
             return grid
