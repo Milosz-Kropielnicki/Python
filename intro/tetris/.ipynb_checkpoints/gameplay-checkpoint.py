@@ -22,8 +22,8 @@ def CalculateScore(grid, blocksLanded, rowsCompleted, timeElapsed):
     """Work out the score."""
 
     totalSeconds = int(timeElapsed.total_seconds())
-    minutes = totalSeconds
-    hours = totalSeconds
+    minutes = totalSeconds // 60
+    hours = totalSeconds // 3600
 
     points = (blocksLanded * _POINTS_PER_BLOCK + rowsCompleted * _POINTS_PER_ROW + minutes * _POINTS_PER_MINUTE + hours * _POINTS_PER_HOUR)
 

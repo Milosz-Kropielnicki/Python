@@ -40,7 +40,6 @@ def move_block(grid, col, row, step):
     if 0 <= new_col < len(grid) and grid[new_col][row] == _BLANK:
         grid[new_col][row] = grid[col][row] # Copies existing block data
         grid[col][row] = _BLANK
-        redraw(grid)
         return new_col
 
     # This return (and the previous one) let the caller know the block has moved
@@ -94,8 +93,10 @@ def show_dropping_block(grid, column_number):
 
             if keyboard.is_pressed('right'):
                 col = move_block(grid, col, row, +1)
+                redraw(grid)
             elif keyboard.is_pressed('left'):
                 col = move_block(grid, col, row, -1)
+                redraw(grid)
 
         # Checks if landed on bottom row, ELSE IF landed on block
         if row == len(grid[0]) - 1:
