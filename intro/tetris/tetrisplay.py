@@ -72,8 +72,9 @@ def full_row(grid):
         for c in range(len(grid)):
             del grid[c][bottom] # Remove the bottom cell from this 'c' column
             grid[c].insert(0, _BLANK)
+        return 1
 
-    return grid
+    return 0
     
 
 def show_dropping_block(grid, column_number):
@@ -98,11 +99,11 @@ def show_dropping_block(grid, column_number):
 
         # Checks if landed on bottom row, ELSE IF landed on block
         if row == len(grid[0]) - 1:
-            full_row(grid)
+            rowsCleared = full_row(grid)
             redraw(grid)
-            return grid
+            return grid, rowsCleared
         elif grid[col][row + 1] != _BLANK:
-            return grid
+            return grid, 0
         
         # Otherwise continue falling for one
         grid[col][row] = _BLANK

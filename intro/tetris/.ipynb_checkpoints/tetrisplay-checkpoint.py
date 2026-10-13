@@ -1,17 +1,24 @@
-_ROWS = 10
-_COLUMNS = 5
 _INTERVAL = 0.3
 _BLANK = "  "
 _BLOCK = "\u2588\u2588"
+_RED = "\033[38;5;1m"
+_BLUE = "\033[38;5;21m"
+_YELLOW = "\033[38;5;3m"
+_GREEN = "\033[38;5;34m"
+_BLACK = "\033[38;5;0m"
+_ORANGE = "\033[38;5;208m"
+_RESET  = "\033[0m"
+
+_COLORS = [_RED, _BLUE, _YELLOW, _GREEN, _BLACK, _ORANGE]
 
 
-import os, sys, time, keyboard
+import os, sys, time, random, keyboard
 from IPython.display import clear_output
 
 
-def build_clean_grid():
+def build_clean_grid(playerRows, playerColumns):
     """Reset the tetris grid to empty."""
-    return [["  " for i in range(_ROWS)] for i in range(_COLUMNS)]
+    return [["  " for i in range(playerRows)] for i in range(playerColumns)]
     
 
 def redraw(grid):
@@ -30,9 +37,9 @@ def move_block(grid, col, row, step):
     new_col = col + step
 
     # Safety check to stop block from moving past col 0 and 4
-    if 0 <= new_col < _COLUMNS and grid[new_col][row] == _BLANK:
+    if 0 <= new_col < len(grid) and grid[new_col][row] == _BLANK:
+        grid[new_col][row] = grid[col][row] # Copies existing block data
         grid[col][row] = _BLANK
-        grid[new_col][row] = _BLOCK
         redraw(grid)
         return new_col
 
@@ -43,14 +50,32 @@ def move_block(grid, col, row, step):
 def display_grid(grid):
     """Display the current state of the tetris grid "vertically" up the screen. Remember: by default,
     the grid dispays across the screen, row-wise (which, usually, isn't what we want here)."""
-    the_columns = tuple(range(0, _COLUMNS))
-    the_rows = tuple(range(0, _ROWS))
+    the_columns = tuple(range(0, len(grid)))
+    the_rows = tuple(range(0, len(grid[0])))
     for r in the_rows:
         print("|", sep="", end="")
         for c in the_columns:
             print(grid[c][r], "|", sep="", end="")
         print()
 
+def full_row(grid):
+    """Checks if bottom row is full. If yes, remove blocks, shift down top."""
+    
+    bottom = len(grid[0]) - 1 # Bottom row index
+    count = 0
+    
+    for c in range(len(grid)):
+        if grid[c][bottom] != _BLANK:
+            count += 1
+
+    if count == len(grid):
+        for c in range(len(grid)):
+            del grid[c][bottom] # Remove the bottom cell from this 'c' column
+            grid[c].insert(0, _BLANK)
+        return 1
+
+    return 0
+    
 
 def show_dropping_block(grid, column_number):
     """Given a grid and a column to drop into, simulate a visual drop of a box."""
@@ -58,7 +83,8 @@ def show_dropping_block(grid, column_number):
     # Tracks falling INSIDE the function so moving and falling apply to the same block at the same time
     col = column_number
     row = 0
-    grid[col][row] = _BLOCK
+    block = random.choice(_COLORS) + _BLOCK + _RESET # Resets existing colors, randomized for new color, applies it to the block
+    grid[col][row] = block
     redraw(grid)
 
     while True:
@@ -72,13 +98,15 @@ def show_dropping_block(grid, column_number):
                 col = move_block(grid, col, row, -1)
 
         # Checks if landed on bottom row, ELSE IF landed on block
-        if row == _ROWS - 1:
-            return grid
-        elif grid[col][row + 1] == _BLOCK:
-            return grid
+        if row == len(grid[0]) - 1:
+            rowsCleared = full_row(grid)
+            redraw(grid)
+            return grid, rowsCleared
+        elif grid[col][row + 1] != _BLANK:
+            return grid, 0
         
         # Otherwise continue falling for one
         grid[col][row] = _BLANK
         row += 1
-        grid[col][row] = _BLOCK
+        grid[col][row] = block
         redraw(grid)
