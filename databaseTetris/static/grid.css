@@ -1,0 +1,26 @@
+
+div {
+    font-size: 24px;
+}
+
+td div {
+    width: 40px;
+    height: 40px;
+}
+
+div.whitebox {
+    color: black;
+    background-color: white;
+}
+
+div.redbox { color: white; background-color: red; }
+div.bluebox { color: white; background-color: blue; }
+div.yellowbox { color: black; background-color: yellow; }
+div.greenbox { color: white; background-color: green; }
+div.orangebox { color: black; background-color: orange; }
+div.snowbox { color: black; background-color: #ccc; }
+
+div.blackbox {
+    color: white;
+    background-color: black;
+}

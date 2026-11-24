@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block mainbody %}
+
+{% include "board.html" %}
+
+<div
+    hx-post="/tick"
+    hx-trigger="every 300ms"
+    hx-swap="none">
+</div>
+
+<div id="over"></div>
+
+<div
+    hx-post="/counting"
+    hx-trigger="every 1s"
+    hx-target="this"
+    hx-swap="innerHTML">
+    Time is ticking...
+</div>
+
+
+<div id="key-display">Use the left and right arrow keys (read by pynput on the server machine)</div>
+
+{% endblock %}

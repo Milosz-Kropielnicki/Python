@@ -1,0 +1,15 @@
+<div id="points"{% if oob %} hx-swap-oob="true"{% endif %}>Score: {{ points }}</div>
+<table id="board" border="1"{% if oob %} hx-swap-oob="true"{% endif %}>
+
+    {% for row in range(rowcount) %}
+        <tr>
+            {% for col in range(colcount) %}
+                <td>
+                    {% set cell = grid[col][row] %}
+                    {% set colour = "white" if cell == "blank" else ("snow" if cell == "white" else cell) %}
+                    {% include "snippet.html" %}
+                </td>
+            {% endfor %}
+        </tr>
+    {% endfor %}
+</table>

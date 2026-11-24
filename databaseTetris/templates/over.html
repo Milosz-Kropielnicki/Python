@@ -1,0 +1,11 @@
+<div id="over" hx-swap-oob="true">
+    {% if state.user %}
+        User {{ state.user }} survived for {{ state.elapsed }}s<br>
+        Score: {{ state.score }}
+    {% else %}
+        Game Over! Score: {{ state.score }}
+        <form hx-post="/score" hx-target="#over" hx-swap="outerHTML">
+            <input name="username" placeholder="Username" required>
+        </form>
+    {% endif %}
+</div>

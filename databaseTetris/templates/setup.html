@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block mainbody %}
+
+<form method="post" action="/start">
+    <div>
+        <label for="rows">Rows:</label>
+        <input id="rows" name="rows" type="number" value="{{rows}}" min="{{min_size}}" max="{{max_size}}" required>
+    </div>
+    <div>
+        <label for="cols">Columns:</label>
+        <input id="cols" name="cols" type="number" value="{{cols}}" min="{{min_size}}" max="{{max_size}}" required>
+    </div>
+    <div>
+        <button type="submit">Start</button>
+    </div>
+</form>
+
+{% endblock %}
